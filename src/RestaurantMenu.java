@@ -79,18 +79,23 @@ public class RestaurantMenu extends JFrame {
     }
 
     private void loadMenuData() {
-        // Используем относительный путь к файлу menu.txt
-        String relativePath = "C:\\Users\\USER\\Labs_3.1\\ПрогСП\\Lab5\\menu.txt";
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(this);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(relativePath))) {
-            menuData.clear();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                menuData.add(line);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                menuData.clear();
+                menuTextArea.setText(""); // Очищаем текстовую область перед загрузкой новых данных
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    menuData.add(line);
+                    menuTextArea.append(line + "\n"); // Добавляем каждую строку в текстовую область
+                }
+                updateMenuData();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            updateMenuData();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
